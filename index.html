@@ -1,101 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cakelooms – Dark chocolate cakes</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cakelooms – Dark chocolate cakes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-<main class="hero">
-  <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3320"/><stop offset="1" stop-color="#2c170e"/></linearGradient></defs>
-    <path fill="url(#g)" d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z"/>
-    <path fill="none" stroke="rgba(255,220,180,.12)" stroke-width="2" d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34"/>
-  </svg>
+  <main class="hero">
+    <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#5a3320" />
+          <stop offset="1" stop-color="#2c170e" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#g)"
+        d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z" />
+      <path fill="none" stroke="rgba(255,220,180,.12)" stroke-width="2"
+        d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34" />
+    </svg>
 
-  <nav>
-    <a class="logo" href="#"><img src="assets/logo.webp" alt="" width="44" height="52"><span>Cakelooms</span></a>
-    <div class="links">
-      <a class="btn" href="#">Order a cake</a>
+    <nav>
+      <a class="logo" href="#"><img src="assets/logo.webp" alt="" width="44" height="52"><span>Cakelooms</span></a>
+      <div class="links">
+        <a class="btn" href="https://wa.me/919037141594" target="_blank">Order a cake</a>
+      </div>
+    </nav>
+
+    <div class="stage" id="stage">
+      <div class="rig" id="rig">
+        <div class="layer" data-z="-220">
+          <h2 class="word" aria-hidden="true">Cakelooms</h2>
+        </div>
+        <div class="layer" data-z="-90">
+          <div class="glow"></div>
+        </div>
+        <div class="layer" data-z="0">
+          <div class="floor"></div>
+        </div>
+        <div class="layer" data-z="160" id="shards"></div>
+      </div>
     </div>
-  </nav>
 
-  <div class="stage" id="stage">
-    <div class="rig" id="rig">
-      <div class="layer" data-z="-220"><h2 class="word" aria-hidden="true">Cakelooms</h2></div>
-      <div class="layer" data-z="-90"><div class="glow"></div></div>
-      <div class="layer" data-z="0"><div class="floor"></div></div>
-      <div class="layer" data-z="160" id="shards"></div>
+    <section class="copy">
+      <span class="eyebrow">Made Fresh, Made Special, Made for You</span>
+      <h1>Cakes, Pastries & More.</h1>
+      <p>Made in small batches with real cocoa and fresh fruit, then finished by hand for your table.</p>
+      <div class="cta"><a class="btn" href="https://wa.me/919037141594" target="_blank">Order a cake</a><a
+          class="btn ghost" href="#signature">See the menu</a>
+      </div>
+    </section>
+    <ul class="note">
+      <li>Layers of flavour, moments of joy</li>
+      <li>Artfully crafted, irresistibly delicious</li>
+      <li>Turning celebrations into sweet memories</li>
+    </ul>
+    <div class="hint" id="hint">Scroll to place the cherry<i></i></div>
+  </main>
+
+  <section class="cake-sec" id="signature">
+    <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#5a3320" />
+          <stop offset="1" stop-color="#2c170e" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#g2)"
+        d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z" />
+      <path fill="none" stroke="rgba(255,220,180,.12)" stroke-width="2"
+        d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34" />
+    </svg>
+    <figure class="cake-fig" id="fig">
+      <span class="gshadow" id="gs2"></span>
+      <div class="tilt" id="tilt2"><img id="cakeImg"
+          alt="Two-layer dark chocolate cake with glaze on a white plate and gold stand"
+          src="assets/cake-signature.webp"><span class="sheen" id="sheen2"></span></div>
+      <span class="contact" id="contact"></span>
+    </figure>
+
+
+    <div class="cake-txt">
+      <span class="eyebrow">THE SWEET ART OF CELEBRATION</span>
+
+      <h2>Where Every Slice Creates a Beautiful Memory.</h2>
+
+      <p>
+        At CakeLooms, we believe every celebration deserves a little sweetness.
+        From precious little moments to unforgettable milestones, we create
+        cakes that bring happiness, make memories, and turn every occasion
+        into something truly special.
+      </p>
+
+      <div class="cta">
+        <a class="btn" href="#">Explore Our Creations</a>
+        <a class="btn ghost" href="https://wa.me/919037141594" target="_blank">Pick Your Cakes</a>
+      </div>
     </div>
-  </div>
 
-  <section class="copy">
-    <h1>Dark chocolate cakes, baked slowly.</h1>
-    <p>Made in small batches with real cocoa and fresh fruit, then finished by hand for your table.</p>
-    <div class="cta"><a class="btn" href="#">Order a cake</a><a class="btn ghost" href="#signature">See the menu</a></div>
   </section>
-  <ul class="note"><li>Baked fresh each morning</li><li>Real cocoa, no shortcuts</li><li>Custom cakes in 3 days</li></ul>
-  <div class="hint" id="hint">Scroll to place the cherry<i></i></div>
-</main>
 
-<section class="cake-sec" id="signature">
-  <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
-    <defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3320"/><stop offset="1" stop-color="#2c170e"/></linearGradient></defs>
-    <path fill="url(#g2)" d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z"/>
-    <path fill="none" stroke="rgba(255,220,180,.12)" stroke-width="2" d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34"/>
-  </svg>
-  <figure class="cake-fig" id="fig">
-    <span class="gshadow" id="gs2"></span>
-    <div class="tilt" id="tilt2"><img id="cakeImg" alt="Two-layer dark chocolate cake with glaze on a white plate and gold stand" src="assets/cake-signature.webp"><span class="sheen" id="sheen2"></span></div>
-    <span class="contact" id="contact"></span>
-  </figure>
-  <div class="cake-txt">
-    <h2>Our signature chocolate cake</h2>
-    <p>Two layers of dark chocolate sponge with a thick milk chocolate ganache between them. A glossy glaze runs down the sides, and every cake leaves the kitchen with one cherry on top.</p>
-    <dl class="facts">
-      <div><dt>Size</dt><dd>8 inch</dd></div>
-      <div><dt>Serves</dt><dd>8 to 10</dd></div>
-      <div><dt>Sponge</dt><dd>Dark chocolate, two layers</dd></div>
-      <div><dt>Filling</dt><dd>Milk chocolate ganache</dd></div>
-    </dl>
-    <div class="cta"><a class="btn" href="#">Order this cake</a><a class="btn ghost" href="#">See all cakes</a></div>
-  </div>
-</section>
+  <section class="tier-sec" id="tiered">
+    <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f8efdd" />
+          <stop offset="1" stop-color="#e7d6b6" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#g3)"
+        d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z" />
+      <path fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"
+        d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34" />
+    </svg>
 
-<section class="tier-sec" id="tiered">
-  <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
-    <defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8efdd"/><stop offset="1" stop-color="#e7d6b6"/></linearGradient></defs>
-    <path fill="url(#g3)" d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z"/>
-    <path fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2" d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34"/>
-  </svg>
-  <div class="tier-txt">
-    <h2>Tiered cakes for the days that matter</h2>
-    <p>Weddings, anniversaries and big birthdays. We bake every tier by hand, pour the glaze when the cake is cold, and finish it with fresh cherries before it goes out.</p>
-    <dl class="facts">
-      <div><dt>Tiers</dt><dd>2 to 4</dd></div>
-      <div><dt>Serves</dt><dd>20 to 60</dd></div>
-      <div><dt>Finish</dt><dd>Ganache drip, fresh cherries</dd></div>
-      <div><dt>Order ahead</dt><dd>3 days</dd></div>
-    </dl>
-    <div class="cta"><a class="btn" href="#">Plan your cake</a><a class="btn ghost" href="#contact">Message us</a></div>
-  </div>
-  <figure class="tier-fig" id="fig3">
-    <span class="glow3" id="gs3"></span>
-    <div class="tilt" id="tilt3"><img id="cake3Img" alt="Two-tier dark chocolate cake with glossy ganache drips on a dark stand" src="assets/cake-tiered.webp"><span class="sheen" id="sheen3"></span></div>
-    <span class="contact" id="contact3"></span>
-  </figure>
-</section>
-<footer id="contact">
-  <a class="logo" href="#"><img src="assets/logo.webp" alt="" width="55" height="64"><span>Cakelooms</span></a>
-  <nav><a href="#signature">Signature cake</a><a href="#tiered">Tiered cakes</a><a href="#">Order a cake</a></nav>
-  <small>© 2026 Cakelooms. Baked slowly, finished by hand.</small>
-</footer>
-<div class="fx" id="fx" aria-hidden="true"><img alt="" src="assets/cherry-fx.webp" draggable="false"></div>
+    <div class="tier-txt">
+      <span class="eyebrow">CRAFTED WITH EXPERIENCE, CREATIVITY & PRECISION</span>
 
-<script src="js/script.js"></script>
+      <h2>Passion in Every Layer, Perfection in Every Creation.</h2>
+
+      <p>
+        At CakeLooms, every cake is crafted with skill, experience,
+        and an exceptional eye for detail. From carefully preparing
+        each layer to achieving the perfect texture, flavour, and
+        finish, our expertise and dedication bring every creation
+        to life with quality and elegance.
+      </p>
+
+      <div class="cta">
+        <a class="btn" href="#">Plan Your Cake</a>
+        <a class="btn ghost" href="https://wa.me/919037141594" target="_blank">Message us</a>
+      </div>
+    </div>
+
+
+
+    <figure class="tier-fig" id="fig3">
+      <span class="glow3" id="gs3"></span>
+      <div class="tilt" id="tilt3"><img id="cake3Img"
+          alt="Two-tier dark chocolate cake with glossy ganache drips on a dark stand"
+          src="assets/cake-tiered.webp"><span class="sheen" id="sheen3"></span></div>
+      <span class="contact" id="contact3"></span>
+    </figure>
+  </section>
+
+  <section class="order-sec" id="order">
+    <svg class="drip" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#25130c" />
+          <stop offset="1" stop-color="#160a06" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#g4)"
+        d="M0 0H1440V34C1410 34 1405 96 1376 96S1344 40 1310 40 1270 70 1240 70 1214 30 1170 30 1140 108 1100 108 1070 44 1030 44 1000 62 960 62 930 26 880 26 850 84 810 84 780 38 730 38 700 118 660 118 630 40 590 40 560 64 520 64 490 24 440 24 410 90 370 90 340 36 300 36 270 74 230 74 200 30 150 30 120 100 80 100 50 44 0 44Z" />
+      <path fill="none" stroke="rgba(255,220,180,.14)" stroke-width="2"
+        d="M0 44C50 44 50 100 80 100S120 30 150 30 200 74 230 74 270 36 300 36 340 90 370 90 410 24 440 24 490 64 520 64 560 40 590 40 630 118 660 118 700 38 730 38 780 84 810 84 850 26 880 26 930 62 960 62 1000 44 1030 44 1070 108 1100 108 1140 30 1170 30 1214 70 1240 70 1270 40 1310 40 1344 96 1376 96S1410 34 1440 34" />
+    </svg>
+
+    <div class="order-grid">
+      <div class="order-txt">
+        <span class="eyebrow">FRESHLY BAKED & SPEEDILY DELIVERED</span>
+        <h2>Hot from the Oven, Swift to Your Door.</h2>
+
+        <div class="order-perks">
+          <div class="perk-item">
+            <span class="perk-icon">⚡</span>
+            <div>
+              <strong>Express Delivery</strong>
+              <small>Arrives fresh in 30–45 mins</small>
+            </div>
+          </div>
+          <div class="perk-item">
+            <span class="perk-icon">📦</span>
+            <div>
+              <strong>Carefully Protected</strong>
+              <small>Zero-tilt custom cake boxing</small>
+            </div>
+          </div>
+          <div class="perk-item">
+            <span class="perk-icon">🎂</span>
+            <div>
+              <strong>Baked to Order</strong>
+              <small>Always fresh, never shelf-stored</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-stage" id="deliveryStage">
+        <div class="order-rig" id="deliveryRig">
+          <div class="speed-trails" aria-hidden="true">
+            <span class="trail t1"></span>
+            <span class="trail t2"></span>
+            <span class="trail t3"></span>
+            <span class="trail t4"></span>
+            <span class="trail t5"></span>
+            <span class="road-dash r1"></span>
+            <span class="road-dash r2"></span>
+            <span class="road-dash r3"></span>
+          </div>
+
+          <div class="scooter-tilt" id="scooterTilt">
+            <img src="assets/delivery.jpg" alt="CakeLooms 3D scooter delivery rider ready for delivery" id="deliveryImg" class="scooter-img">
+            <div class="exhaust-smoke" id="exhaustSmoke" aria-hidden="true">
+              <span class="smoke-puff s1"></span>
+              <span class="smoke-puff s2"></span>
+              <span class="smoke-puff s3"></span>
+              <span class="smoke-puff s4"></span>
+              <span class="smoke-puff s5"></span>
+              <span class="smoke-puff s6"></span>
+              <span class="smoke-puff s7"></span>
+              <span class="smoke-ring sr1"></span>
+              <span class="smoke-ring sr2"></span>
+            </div>
+            <div class="ground-dust" aria-hidden="true">
+              <span class="dust d1"></span>
+              <span class="dust d2"></span>
+              <span class="dust d3"></span>
+            </div>
+            <span class="box-glow" id="boxGlow" aria-hidden="true"></span>
+            <span class="scooter-shadow"></span>
+          </div>
+
+          <a class="order-badge" href="https://wa.me/919037141594?text=Hi%20Cakelooms%2C%20I%20would%20like%20to%20order%20now%20for%20delivery" target="_blank" title="Order Now on WhatsApp">
+            <span class="badge-pulse"></span>
+            <div class="badge-content">
+              <span class="badge-tag">READY FOR DELIVERY</span>
+              <strong class="badge-title">ORDER NOW</strong>
+              <span class="badge-num">9037141594</span>
+            </div>
+            <span class="badge-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="site-footer">
+    <div class="footer-grid">
+      <!-- Brand & Mission Column -->
+      <div class="footer-col footer-brand">
+        <a class="logo" href="#"><img src="assets/logo.webp" alt="CakeLooms logo" width="55" height="64"><span>Cakelooms</span></a>
+        <p class="brand-desc">
+          Crafting moments of pure sweetness. From daily cravings to grand celebrations, every cake is baked slowly and finished by hand.
+        </p>
+      </div>
+
+      <!-- Address & Location Section -->
+      <div class="footer-col footer-address">
+        <h4 class="footer-title">Visit Our Kitchen</h4>
+        <div class="address-card">
+          <div class="address-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+          </div>
+          <div class="address-details">
+            <strong>HM Tower, Pattambi</strong>
+            <span>Near Railway Station</span>
+            <small>Pattambi, Kerala</small>
+            <a class="location-link" href="https://www.google.com/maps/search/?api=1&query=HM+Tower+Pattambi+Near+Railway+Station" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+              <span>Get Directions / Traction</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connect & Socials Section -->
+      <div class="footer-col footer-social">
+        <h4 class="footer-title">Connect</h4>
+        <div class="social-icons-row">
+          <a class="social-icon-btn wa-icon-btn" href="https://wa.me/919037141594?text=Hi%20Cakelooms%2C%20I%20would%20like%20to%20order%20a%20cake" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" title="WhatsApp: 9037141594">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.79 14.07c-.24.68-1.41 1.25-1.95 1.33-.5.07-1.14.1-3.32-.8-2.79-1.16-4.59-4.01-4.73-4.19-.14-.19-1.13-1.51-1.13-2.87 0-1.37.71-2.04.97-2.32.25-.28.56-.35.75-.35.19 0 .37.01.53.01.17 0 .4.06.63.58.24.58.82 2 .89 2.15.07.15.12.33.02.53-.1.19-.15.31-.3.48-.15.17-.32.38-.46.51-.15.15-.31.31-.13.62.18.31.79 1.3 1.7 2.11 1.17 1.05 2.16 1.37 2.47 1.52.31.15.49.13.67-.08.19-.21.79-.92 1-.1.24.21.39.46.21.65-.18.19-.24.68-.24.68z"/></svg>
+          </a>
+
+          <a class="social-icon-btn ig-icon-btn" href="https://instagram.com/cakelooms" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram" title="Instagram: @cakelooms">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar: Copyright & Identity Built-by Credit -->
+    <div class="footer-bottom">
+      <small>© 2026 Cakelooms. Baked slowly, finished by hand.</small>
+      <div class="built-by">
+        <span>Designed &amp; Built with <i class="heart-pulse">♥</i> by <a class="dev-link" href="https://mridhul9366.github.io/Mridhul-portfolio/" target="_blank" rel="noopener noreferrer">Mridhul</a></span>
+      </div>
+    </div>
+  </footer>
+  <div class="fx" id="fx" aria-hidden="true"><img alt="" src="assets/cherry-fx.webp" draggable="false"></div>
+
+  <script src="js/script.js"></script>
 </body>
+
 </html>
