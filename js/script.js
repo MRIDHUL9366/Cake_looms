@@ -12,6 +12,7 @@
   }
   var $ = function (i) { return document.getElementById(i) };
   var fx = $('fx'), fig = $('fig'), fig3 = $('fig3'), contact = $('contact'), contact3 = $('contact3'), hint = $('hint');
+  var cherrySheen = $('cherrySheen'), cherryGlint = $('cherryGlint'), cherryShadow = $('cherryShadow');
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var clamp = function (v) { return Math.min(1, Math.max(0, v)) }, lerp = function (a, b, t) { return a + (b - a) * t };
   var ease = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2 };
@@ -27,7 +28,10 @@
     ax2 = r.left + r.width * A2.x; ay2 = r.top + y + r.height * A2.y; sc2 = r.width * A2.h / H0;
     ax3 = r3.left + r3.width * A3.x; ay3 = r3.top + y + r3.height * A3.y; sc3 = r3.width * A3.h / H0;
     S1 = Math.max(vh * .5, ay2 - vh * .55);
-    Tb = ay3 - vh * .6; Ta = Math.max(S1 + vh * .05, Math.min(ay2 - vh * .2, Tb - vh * .45)); if (Tb - Ta < vh * .3) Tb = Ta + vh * .3;
+    // Smooth scroll transition window between Cake 1 and Cake 2
+    Ta = Math.max(S1 + vh * .08, ay2 - vh * .38);
+    Tb = ay3 - vh * .50;
+    if (Tb - Ta < vh * .35) Tb = Ta + vh * .35;
     px0 = vw / 2 - (.5 - OX) * W0; py0 = vh * (vw < 1000 ? .42 : .5) + H0 / 2;
     var dImg = $('deliveryImg');
     if (dImg) {
@@ -35,10 +39,10 @@
       ax4 = r4.left + r4.width * A4.x; ay4 = r4.top + y + r4.height * A4.y; sc4 = r4.width * A4.h / H0;
       r4h = r4.height || (r4.width * 576 / 1024);
       Td = ay4 - vh * .48;
-      // Scroll distance for flight into box: triggers when user has scrolled near the delivery boy
-      var flightDist = Math.min(vh * .64, Math.max(vh * .46, 320));
-      Tc = Math.max(Tb + vh * .32, Td - flightDist);
-      if (Td - Tc < vh * .32) Td = Tc + vh * .32;
+      // Smooth scroll transition window between Cake 2 and Delivery box
+      // Cherry lifts off as user starts scrolling away from Cake 2 (Cake 2 is at ~38% viewport height)
+      Tc = Math.max(Tb + vh * .10, ay3 - vh * .38);
+      if (Td - Tc < vh * .38) Td = Tc + vh * .38;
     }
   }
   addEventListener('resize', measure); addEventListener('load', measure);
@@ -46,6 +50,11 @@
   if ($('deliveryImg')) $('deliveryImg').addEventListener('load', measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
   measure();
+  if (cherrySheen && $('cherryImg')) {
+    var cm = 'url("' + $('cherryImg').src + '")';
+    cherrySheen.style.webkitMaskImage = cm;
+    cherrySheen.style.maskImage = cm;
+  }
 
   var tx = 0, ty = 0, cx = 0, cy = 0, t0 = performance.now(), landedAt = -1, state = 0, last = performance.now();
   /* ---------- 3D cakes: tilt, light sweep, moving shadow ---------- */
@@ -198,56 +207,116 @@
     var px = lerp(px0, ax2, e1) - Math.sin(Math.PI * e1) * vw * .03;
     var py = lerp(py0, ay2 - sy + sc2 * H0 * .04, e1) + bob;
     var sc = lerp(1, sc2, e1);
-    var fall = 0;
+    /* Cake 1 -> Cake 2: Centered on the scrolling page */
     if (q > 0) {
-      // leaves the first cake with a small roll, then drops under gravity (speed builds up), x eases out first
-      fall = q * q;                       // free fall from rest: distance grows with the square of time
-      var xe = q;                       // steady sideways drift
-      px = lerp(ax2, ax3, xe);
-      // released where it sat on the first cake, then falls in the viewport to the spot where the dark cake meets it
-      py = lerp(ay2 - Ta + sc2 * H0 * .04, ay3 - Tb + sc3 * H0 * .04, fall) - lift + (q >= 1 ? Tb - sy : 0);
-      sc = lerp(sc2, sc3, q);
+      var eq = ease(q);
+      var y1Vp = ay2 - sy + sc2 * H0 * 0.04;
+      var y2Vp = ay3 - sy + sc3 * H0 * 0.04;
+      var centerVpY = vh * 0.48; // exact vertical center of the scrolling viewport
+
+      // Smoothly rises from Cake 1 into viewport center at q=0.5, then lands onto Cake 2
+      if (q < 0.5) {
+        var t1 = q / 0.5;
+        var et1 = t1 * t1 * (3 - 2 * t1); // smoothstep
+        py = lerp(y1Vp, centerVpY, et1);
+      } else {
+        var t2 = (q - 0.5) / 0.5;
+        var et2 = t2 * t2 * (3 - 2 * t2); // smoothstep
+        py = lerp(centerVpY, y2Vp, et2);
+      }
+      py -= lift;
+
+      // Arcs horizontally across the screen from Cake 1 to Cake 2
+      var arcX12 = Math.sin(Math.PI * q) * (vw < 700 ? 16 : 34);
+      px = lerp(ax2, ax3, eq) + arcX12;
+      sc = lerp(sc2, sc3, eq);
     }
-    var tumble = Math.sin(q * 10) * (1 - q) * (q > 0 ? 1 : 0);
-    var ry = (reduce ? 0 : e1 * 720 + Math.pow(q, 1.6) * 360) + (cx * 16 + idle) * k,
-        rx = -cy * 9 * k + (reduce ? 0 : tumble * 18),
-        rz = reduce ? 0 : Math.sin(Math.PI * e1) * -10 + tumble * 26;
+
+    // Realistic 3D perspective orientation (never collapses to 0-width paper slice)
+    var roll = Math.sin(Math.PI * e1) * -22 + (q > 0 ? Math.sin(Math.PI * q) * -26 + Math.cos(q * Math.PI * 2) * 8 : 0);
+    var pitch = -cy * 8 * k + Math.sin(Math.PI * e1) * 12 + (q > 0 ? Math.sin(Math.PI * q) * 16 : 0);
+    var yaw = (cx * 14 + idle) * k + Math.sin(Math.PI * e1) * 18 + (q > 0 ? Math.sin(Math.PI * q) * -20 : 0);
+
+    var ry = reduce ? 0 : yaw,
+        rx = reduce ? 0 : pitch,
+        rz = reduce ? 0 : roll;
 
     var cherryOp = 1;
     if (u > 0 && ax4 !== undefined) {
-      var uFlight = clamp(u / 0.82);
-      var euFlight = ease(uFlight);
-      var uDip = clamp((u - 0.82) / 0.18);
+      var euFlight = ease(clamp(u / 0.88));
+      var uDip = clamp((u - 0.88) / 0.08);
       var eDip = uDip * uDip;
 
-      var arcX = Math.sin(Math.PI * euFlight) * (vw < 700 ? -12 : -28);
+      var arcX = Math.sin(Math.PI * euFlight) * (vw < 700 ? -14 : -30);
       px = lerp(ax3, ax4, euFlight) + arcX;
 
-      // On laptop, Cake 2 is on screen; on mobile, Cake 2 has scrolled up, so smoothly fly down into screen
-      var cake2VpY = ay3 - Tc + sc3 * H0 * 0.04;
-      var pyStart = Math.max(-40, cake2VpY);
-      var startDocY = Tc + pyStart;
-      var targetDocY = ay4 + sc4 * H0 * 0.04;
+      // Live viewport positions of Cake 2 and Delivery box
+      var yCake2Vp = ay3 - sy + sc3 * H0 * 0.04;
+      var yBoxVp = ay4 - sy + sc4 * H0 * 0.04;
+      var centerBoxY = vh * 0.48; // exact visual center of scrolling screen
 
-      var maxArc = Math.max(16, Math.min(vh * 0.20, 160, pyStart + 60));
-      var flightArc = Math.sin(Math.PI * euFlight) * maxArc;
+      // Smooth piecewise flight: Cake 2 -> screen center -> delivery box
+      var baseFlightY;
+      if (u < 0.44) {
+        var tBox1 = u / 0.44;
+        var etBox1 = tBox1 * tBox1 * (3 - 2 * tBox1);
+        baseFlightY = lerp(yCake2Vp, centerBoxY, etBox1);
+      } else {
+        var tBox2 = clamp((u - 0.44) / 0.44);
+        var etBox2 = tBox2 * tBox2 * (3 - 2 * tBox2);
+        baseFlightY = lerp(centerBoxY, yBoxVp, etBox2);
+      }
       var dipY = eDip * (r4h * 0.16);
-      var docY = lerp(startDocY, targetDocY, euFlight) - flightArc + dipY;
-      py = docY - sy;
+      py = baseFlightY + dipY;
 
       sc = lerp(sc3, sc4, euFlight) * (1 - uDip * 0.22);
       if (!reduce) {
-        var flightSpin = euFlight * 540;
-        var flightTumble = Math.sin(euFlight * Math.PI) * 24;
-        ry += flightSpin;
-        rx += flightTumble * (1 - uDip);
-        rz += Math.sin(euFlight * Math.PI) * -18 * (1 - uDip);
+        var flightPhase = Math.sin(Math.PI * euFlight);
+        ry += flightPhase * 20;
+        rx += flightPhase * 14;
+        rz += flightPhase * -22;
       }
-      if (u >= 0.82) cherryOp = Math.max(0, 1 - (u - 0.82) / 0.15);
+      if (u >= 0.88) cherryOp = Math.max(0, 1 - (u - 0.88) / 0.08);
     }
 
-    fx.style.opacity = cherryOp.toFixed(3);
+    /* AFTER DELIVERY PATTERN: Ensure absolutely NO shadow, NO red mark, and NOTHING left */
+    if (u >= 0.96) {
+      fx.style.display = 'none';
+      fx.style.visibility = 'hidden';
+      fx.style.opacity = '0';
+    } else {
+      fx.style.display = 'block';
+      fx.style.visibility = 'visible';
+      fx.style.opacity = cherryOp.toFixed(3);
+    }
+
     fx.style.transform = 'translate3d(' + (px - OX * W0).toFixed(1) + 'px,' + (py - H0).toFixed(1) + 'px,0) perspective(1200px) rotateY(' + ry.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) scale(' + (sc * sx).toFixed(4) + ',' + (sc * syy).toFixed(4) + ')';
+
+    /* Dynamic 3D Spherical Lighting, Glint, and Altitude Shadow */
+    if (cherrySheen) {
+      var gx = 34 + rx * 0.45 + cx * 6;
+      var gy = 30 - ry * 0.35 + cy * 6;
+      cherrySheen.style.setProperty('--gx', gx.toFixed(1) + '%');
+      cherrySheen.style.setProperty('--gy', gy.toFixed(1) + '%');
+    }
+    if (cherryGlint) {
+      var glx = 32 + rx * 0.35 + cx * 5;
+      var gly = 34 - ry * 0.30 + cy * 5;
+      cherryGlint.style.setProperty('--glint-x', glx.toFixed(1) + '%');
+      cherryGlint.style.setProperty('--glint-y', gly.toFixed(1) + '%');
+      var glOp = reduce ? 0.85 : 0.75 + 0.25 * Math.sin((now - t0) / 450 + rz * 0.05);
+      cherryGlint.style.setProperty('--glint-op', glOp.toFixed(2));
+    }
+    if (cherryShadow) {
+      var inAir = (q > 0.05 && q < 0.95) || (u > 0.05 && u < 0.92);
+      var alt = inAir ? 1 : 0;
+      var sblur = lerp(5, 14, alt);
+      var sscale = lerp(1.0, 1.35, alt);
+      var sop = u >= 0.96 ? 0 : lerp(0.68, 0.32, alt) * cherryOp;
+      cherryShadow.style.setProperty('--sblur', sblur.toFixed(1) + 'px');
+      cherryShadow.style.setProperty('--sscale', sscale.toFixed(2));
+      cherryShadow.style.setProperty('--sop', sop.toFixed(2));
+    }
 
     contact.style.setProperty('--c', (Math.max(0, (e1 - .7) / .3) * (1 - clamp(q * 6))).toFixed(2));
     contact3.style.setProperty('--c', (Math.max(0, (q - .65) / .35) * (1 - clamp(u * 5))).toFixed(2));
@@ -255,9 +324,11 @@
     var boxGlow = $('boxGlow');
     if (boxGlow) {
       var bg = 0;
-      if (u > 0.45) {
-        if (u < 0.85) bg = (u - 0.45) / 0.4;
-        else bg = 0.55 + 0.45 * Math.sin((now - t0) / 380);
+      if (u > 0.60 && u < 0.96) {
+        if (u < 0.88) bg = (u - 0.60) / 0.28;
+        else bg = Math.max(0, 1 - (u - 0.88) / 0.08); // cleanly fades to 0 as cherry drops in
+      } else {
+        bg = 0;
       }
       boxGlow.style.setProperty('--bglow', bg.toFixed(2));
     }
@@ -265,7 +336,7 @@
     updateCakes(now, dt);
     var delRig = $('deliveryRig');
     if (delRig) {
-      delRig.classList.toggle('packed', u >= 0.88);
+      delRig.classList.toggle('packed', u >= 0.92);
       if (!reduce) {
         var rD = delRig.getBoundingClientRect();
         if (rD.top < vh && rD.bottom > 0) {
