@@ -693,10 +693,10 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--foil);outline-offset:
 /* Delivery Box Opening Aura & Packing Glow */
 .box-glow {
   position: absolute;
-  left: 33.5%;
-  top: 31%;
+  left: 35.5%;
+  top: 38%;
   width: 14.5%;
-  height: 25%;
+  height: 22%;
   border-radius: 12px;
   background: radial-gradient(ellipse at 50% 35%, rgba(255, 230, 160, 0.85), rgba(214, 40, 60, 0.45) 45%, transparent 75%);
   filter: blur(8px);
