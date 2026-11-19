@@ -17,9 +17,9 @@
   var clamp = function (v) { return Math.min(1, Math.max(0, v)) }, lerp = function (a, b, t) { return a + (b - a) * t };
   var ease = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2 };
 
-  /* ---------- cherry that travels: hero -> vanilla cake -> dark cake -> delivery box ---------- */
-  var OX = .383, A2 = { x: .50, y: .135, h: .19 }, A3 = { x: .50, y: .0784, h: .168 }, A4 = { x: .427, y: .410, h: .125 };
-  var vw, vh, H0, W0, ax2, ay2, sc2, ax3, ay3, sc3, ax4, ay4, sc4, r4h, S1, Ta, Tb, Tc, Td, px0, py0;
+  /* ---------- cherry that travels: hero -> vanilla cake -> dark cake ---------- */
+  var OX = .383, A2 = { x: .50, y: .135, h: .19 }, A3 = { x: .50, y: .0784, h: .168 };
+  var vw, vh, H0, W0, ax2, ay2, sc2, ax3, ay3, sc3, S1, Ta, Tb, px0, py0;
   function measure() {
     vw = innerWidth; vh = innerHeight;
     H0 = Math.min(vh * (vw < 700 ? .44 : vw < 1000 ? .54 : .66), 560, vw * (vw < 700 ? .56 : vw < 1000 ? .62 : .8) * 900 / 630); W0 = H0 * .7;
@@ -33,31 +33,10 @@
     Tb = ay3 - vh * .50;
     if (Tb - Ta < vh * .35) Tb = Ta + vh * .35;
     px0 = vw / 2 - (.5 - OX) * W0; py0 = vh * (vw < 1000 ? .42 : .5) + H0 / 2;
-    var dImg = $('deliveryImg');
-    if (dImg) {
-      var delRig = $('deliveryRig');
-      var prevRigTransform = delRig ? delRig.style.transform : '';
-      if (delRig) delRig.style.transform = 'none';
-      var r4 = dImg.getBoundingClientRect();
-      if (delRig) delRig.style.transform = prevRigTransform;
-
-      ax4 = r4.left + r4.width * A4.x;
-      ay4 = r4.top + y + r4.height * A4.y;
-      sc4 = r4.width * A4.h / H0;
-      r4h = r4.height || (r4.width * 558 / 1024);
-
-      // On mobile (vw < 900), the delivery scooter is stacked at the top of the order section
-      // and scrolls past faster than on desktop. Target landing when scooter is at ~52% viewport height.
-      var targetBoxVp = (vw < 900) ? 0.52 : 0.48;
-      Td = ay4 - vh * targetBoxVp;
-      Tc = Math.max(Tb + vh * (vw < 900 ? .08 : .10), ay3 - vh * (vw < 900 ? .34 : .38));
-      var minFlight = vh * (vw < 900 ? .28 : .38);
-      if (Td - Tc < minFlight) Td = Tc + minFlight;
-    }
   }
   addEventListener('resize', measure);
   addEventListener('load', measure);
-  ['cakeImg', 'cake3Img', 'deliveryImg'].forEach(function (id) {
+  ['cakeImg', 'cake3Img'].forEach(function (id) {
     var img = $(id);
     if (img && !img.complete) img.addEventListener('load', measure);
   });
@@ -202,14 +181,13 @@
     var dt = Math.min(.05, (now - last) / 1000); last = now;
     if (!reduce) stepBake(dt);
     var sy = scrollY, p = clamp(sy / S1), e1 = ease(p), q = clamp((sy - Ta) / (Tb - Ta)), e2 = ease(q), k = 1 - e1;
-    var u = (Tc && Td && sy > Tc) ? clamp((sy - Tc) / (Td - Tc)) : 0;
     cx += (tx - cx) * .07; cy += (ty - cy) * .07;
     var idle = reduce ? 0 : Math.sin((now - t0) / 2400) * 10, bob = reduce ? 0 : Math.sin((now - t0) / 900) * 8 * k;
 
-    var st = u > 0 ? 3 : (q >= 1 ? 2 : (p >= 1 && q <= 0 ? 1 : 0));
+    var st = q >= 1 ? 2 : (p >= 1 && q <= 0 ? 1 : 0);
     if (st !== state) { state = st; landedAt = st > 0 ? now : -1 }
     var sx = 1, syy = 1, lift = 0;
-    if (landedAt > 0 && !reduce && u === 0) {
+    if (landedAt > 0 && !reduce) {
       var d = (now - landedAt) / 1000;
       if (state === 2) {                       // dropped onto the dark cake: gravity bounces that die out
         if (d < 1.8) {
@@ -256,56 +234,6 @@
         rx = reduce ? 0 : pitch,
         rz = reduce ? 0 : roll;
 
-    var cherryOp = 1;
-    if (u > 0 && ax4 !== undefined) {
-      var euFlight = ease(clamp(u / 0.85));
-      var uDip = clamp((u - 0.85) / 0.10);
-      var eDip = uDip * uDip;
-
-      var arcX = Math.sin(Math.PI * euFlight) * (vw < 700 ? -14 : -30);
-      px = lerp(ax3, ax4, euFlight) + arcX;
-
-      // Live viewport positions of Cake 2 and Delivery box
-      var yCake2Vp = ay3 - sy + sc3 * H0 * 0.04;
-      var yBoxVp = ay4 - sy + sc4 * H0 * 0.04;
-      var centerBoxY = vh * 0.48; // exact visual center of scrolling screen
-
-      // Smooth piecewise flight: Cake 2 -> screen center -> delivery box
-      var baseFlightY;
-      if (u < 0.42) {
-        var tBox1 = u / 0.42;
-        var etBox1 = tBox1 * tBox1 * (3 - 2 * tBox1);
-        baseFlightY = lerp(yCake2Vp, centerBoxY, etBox1);
-      } else {
-        var tBox2 = clamp((u - 0.42) / 0.43);
-        var etBox2 = tBox2 * tBox2 * (3 - 2 * tBox2);
-        baseFlightY = lerp(centerBoxY, yBoxVp, etBox2);
-      }
-      var dipY = eDip * (r4h * 0.22);
-      py = baseFlightY + dipY;
-
-      sc = lerp(sc3, sc4, euFlight) * (1 - uDip * 0.35);
-      if (!reduce) {
-        var flightPhase = Math.sin(Math.PI * euFlight);
-        ry += flightPhase * 20;
-        rx += flightPhase * 14;
-        rz += flightPhase * -22;
-      }
-      if (u >= 0.85) cherryOp = Math.max(0, 1 - (u - 0.85) / 0.10);
-    }
-
-    /* AFTER DELIVERY PATTERN: Ensure cherry dips cleanly inside box and NEVER reappears below scooter */
-    var isDelivered = (u >= 0.95) || (Td !== undefined && sy >= Td);
-    if (isDelivered) {
-      fx.style.display = 'none';
-      fx.style.visibility = 'hidden';
-      fx.style.opacity = '0';
-    } else {
-      fx.style.display = 'block';
-      fx.style.visibility = 'visible';
-      fx.style.opacity = cherryOp.toFixed(3);
-    }
-
     fx.style.transform = 'translate3d(' + (px - OX * W0).toFixed(1) + 'px,' + (py - H0).toFixed(1) + 'px,0) perspective(1200px) rotateY(' + ry.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) scale(' + (sc * sx).toFixed(4) + ',' + (sc * syy).toFixed(4) + ')';
 
     /* Dynamic 3D Spherical Lighting, Glint, and Altitude Shadow */
@@ -324,35 +252,22 @@
       cherryGlint.style.setProperty('--glint-op', glOp.toFixed(2));
     }
     if (cherryShadow) {
-      var inAir = (q > 0.05 && q < 0.95) || (u > 0.05 && u < 0.85);
+      var inAir = q > 0.05 && q < 0.95;
       var alt = inAir ? 1 : 0;
       var sblur = lerp(5, 14, alt);
       var sscale = lerp(1.0, 1.35, alt);
-      var sop = isDelivered ? 0 : lerp(0.68, 0.32, alt) * cherryOp;
+      var sop = lerp(0.68, 0.32, alt);
       cherryShadow.style.setProperty('--sblur', sblur.toFixed(1) + 'px');
       cherryShadow.style.setProperty('--sscale', sscale.toFixed(2));
       cherryShadow.style.setProperty('--sop', sop.toFixed(2));
     }
 
     contact.style.setProperty('--c', (Math.max(0, (e1 - .7) / .3) * (1 - clamp(q * 6))).toFixed(2));
-    contact3.style.setProperty('--c', (Math.max(0, (q - .65) / .35) * (1 - clamp(u * 5))).toFixed(2));
-
-    var boxGlow = $('boxGlow');
-    if (boxGlow) {
-      var bg = 0;
-      if (!isDelivered && u > 0.60 && u < 0.95) {
-        if (u < 0.85) bg = (u - 0.60) / 0.25;
-        else bg = Math.max(0, 1 - (u - 0.85) / 0.10);
-      } else {
-        bg = 0;
-      }
-      boxGlow.style.setProperty('--bglow', bg.toFixed(2));
-    }
+    contact3.style.setProperty('--c', Math.max(0, (q - .65) / .35).toFixed(2));
 
     updateCakes(now, dt);
     var delRig = $('deliveryRig');
     if (delRig) {
-      delRig.classList.toggle('packed', u >= 0.90 || isDelivered);
       if (!reduce) {
         var rD = delRig.getBoundingClientRect();
         if (rD.top < vh && rD.bottom > 0) {
