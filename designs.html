@@ -376,8 +376,9 @@
       border: 1px solid var(--line);
     }
     .it {
-      display: flex;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(5.5ch, max-content) max-content;
+      gap: clamp(8px, 2vw, 14px);
       align-items: center;
       padding: 12px 6px;
       border-bottom: 1px solid var(--line);
@@ -397,27 +398,23 @@
       background: rgba(224, 168, 106, 0.08);
     }
     .it b {
-      flex: 1;
+      min-width: 0;
       font-weight: 400;
+      overflow-wrap: anywhere;
     }
     .it i {
       font: 600 15px system-ui, sans-serif;
       font-style: normal;
       color: var(--acc);
       white-space: nowrap;
+      text-align: right;
     }
-    .order-chip {
-      font: 600 11px system-ui, sans-serif;
-      background: rgba(37, 211, 102, 0.15);
-      color: var(--green);
-      border: 1px solid rgba(37, 211, 102, 0.35);
-      border-radius: 99px;
-      padding: 3px 8px;
-      transition: background 0.2s;
-    }
-    .it:hover .order-chip {
-      background: var(--green);
-      color: #07240f;
+    @media (max-width: 360px) {
+      .it {
+        gap: 6px;
+        padding-right: 3px;
+        padding-left: 3px;
+      }
     }
     @keyframes fall {
       from { opacity: 0; transform: translateY(-20px); }
@@ -438,87 +435,6 @@
     .next:hover {
       background: var(--line);
       transform: translateY(-2px);
-    }
-    .info {
-      margin-top: 32px;
-      background: var(--card2);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 22px 18px;
-      animation: rise 0.7s ease-out 0.4s both;
-    }
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: none; }
-    }
-    .it2 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      color: var(--acc);
-      text-align: center;
-    }
-    .addr {
-      text-align: center;
-      margin: 8px 0 16px;
-      line-height: 1.5;
-      font-size: 15px;
-      color: var(--ink);
-    }
-    .addr b {
-      color: var(--acc);
-      font-size: 17px;
-    }
-    .acts {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .ac {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px 6px;
-      color: var(--ink);
-      text-decoration: none;
-      font: 600 13px system-ui, sans-serif;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .ac:hover {
-      background: var(--line);
-      transform: translateY(-2px);
-    }
-    .ac i {
-      font-style: normal;
-      font-size: 22px;
-      animation: hop 2.6s ease-in-out infinite;
-    }
-    .ac:nth-child(2) i { animation-delay: 0.3s; }
-    .ac:nth-child(3) i { animation-delay: 0.6s; }
-    @keyframes hop {
-      0%, 70%, 100% { transform: none; }
-      80% { transform: translateY(-5px); }
-      90% { transform: none; }
-    }
-    .dw {
-      display: block;
-      margin-top: 14px;
-      text-align: center;
-      background: var(--green);
-      color: #07240f;
-      text-decoration: none;
-      font: 700 15px system-ui, sans-serif;
-      border-radius: 12px;
-      padding: 13px;
-      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-      transition: transform 0.2s, filter 0.2s;
-    }
-    .dw:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.05);
     }
     footer {
       text-align: center;
@@ -569,9 +485,305 @@
       95% { transform: rotate(-6deg); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .ban, .it, .info, .fab, .fab::before, .fab::after, .ac i {
+      .ban, .it, .fab, .fab::before, .fab::after {
         animation: none;
         opacity: 1;
+      }
+      .heart-pulse {
+        animation: none;
+      }
+    }
+    .site-footer {
+      --footer-muted: #b9a08c;
+      --footer-text: #f1e4d6;
+      --footer-foil: #dcb98a;
+      position: relative;
+      z-index: 2;
+      background: #110704;
+      border-top: 1px solid rgba(220, 185, 138, .28);
+      padding: clamp(52px, 8vh, 80px) max(clamp(20px, 5vw, 64px), calc((100vw - 1480px) / 2)) calc(80px + env(safe-area-inset-bottom, 0px));
+      color: var(--footer-muted);
+      text-align: left;
+      font: inherit;
+    }
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(36px, 5.5vh, 52px);
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1.25fr .8fr;
+      gap: clamp(32px, 4.5vw, 64px);
+      align-items: start;
+    }
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .footer-col-brand .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: auto;
+      height: auto;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      color: var(--footer-text);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-decoration: none;
+    }
+    .footer-col-brand .logo:hover {
+      transform: none;
+    }
+    .footer-col-brand .logo img {
+      display: block;
+      width: auto;
+      height: clamp(44px, 5vh, 56px);
+      border-radius: 50%;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .5));
+    }
+    .footer-col-brand .brand-desc {
+      max-width: 38ch;
+      margin: 14px 0 0;
+      color: var(--footer-muted);
+      font-size: .95rem;
+      line-height: 1.65;
+      text-align: left;
+    }
+    .footer-title {
+      margin: 0 0 16px;
+      color: var(--footer-foil);
+      font-size: .84rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    .address-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 14px 20px;
+      border: 1px solid rgba(220, 185, 138, .28);
+      border-radius: 16px;
+      background: rgba(42, 23, 16, .72);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+      text-align: left;
+      transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+      backdrop-filter: blur(8px);
+    }
+    .address-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(220, 185, 138, .55);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .35);
+    }
+    .address-icon {
+      display: flex;
+      flex: 0 0 40px;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(176, 21, 50, .45);
+      border-radius: 12px;
+      background: rgba(176, 21, 50, .18);
+      color: #ff6b85;
+    }
+    .address-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      line-height: 1.35;
+      font-style: normal;
+    }
+    .address-details strong {
+      color: var(--footer-text);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .address-details span {
+      color: #e2ceb8;
+      font-size: .88rem;
+    }
+    .location-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+      color: var(--footer-foil);
+      font-size: .82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color .2s ease, transform .2s ease;
+    }
+    .location-link:hover {
+      transform: translateX(3px);
+      color: #fff;
+    }
+    .social-icons-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .social-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(220, 185, 138, .28);
+      border-radius: 14px;
+      background: rgba(42, 23, 16, .72);
+      color: var(--footer-text);
+      text-decoration: none;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease, color .2s ease;
+    }
+    .social-icon-btn:hover {
+      transform: translateY(-3px) scale(1.08);
+    }
+    .wa-icon-btn {
+      color: #25d366;
+    }
+    .wa-icon-btn:hover {
+      border-color: rgba(37, 211, 102, .65);
+      background: rgba(37, 211, 102, .16);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, .32);
+    }
+    .ig-icon-btn {
+      color: #ff5277;
+    }
+    .ig-icon-btn:hover {
+      border-color: rgba(225, 48, 108, .65);
+      background: rgba(225, 48, 108, .16);
+      box-shadow: 0 6px 20px rgba(225, 48, 108, .32);
+    }
+    .footer-bottom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding-top: 24px;
+      border-top: 1px solid rgba(220, 185, 138, .16);
+    }
+    .built-by {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 18px;
+      border: 1px solid rgba(220, 185, 138, .28);
+      border-radius: 999px;
+      background: rgba(220, 185, 138, .08);
+      color: var(--footer-text);
+      font-size: .86rem;
+      letter-spacing: .02em;
+    }
+    .footer-bottom small {
+      color: var(--footer-muted);
+      font-size: .84rem;
+      letter-spacing: .01em;
+    }
+    .dev-link {
+      padding-bottom: 1px;
+      margin-left: 2px;
+      border-bottom: 1px dashed rgba(220, 185, 138, .5);
+      color: var(--footer-foil);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .dev-link:hover {
+      border-bottom-style: solid;
+      border-bottom-color: #fff;
+      color: #fff;
+    }
+    .heart-pulse {
+      display: inline-block;
+      margin: 0 3px;
+      color: #ff3366;
+      font-style: normal;
+      animation: footer-heart-beat 1.8s ease-in-out infinite;
+    }
+    @keyframes footer-heart-beat {
+      0%, 70%, 100% { transform: scale(1); }
+      14%, 42% { transform: scale(1.3); }
+      28% { transform: scale(1); }
+    }
+    @media (min-width: 769px) and (max-width: 999px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+      }
+      .footer-col-social {
+        grid-column: span 2;
+      }
+    }
+    @media (max-width: 768px) {
+      .site-footer {
+        padding: 40px max(clamp(20px, 5vw, 64px), calc((100vw - 1480px) / 2)) calc(80px + env(safe-area-inset-bottom, 0px));
+        text-align: center;
+      }
+      .footer-inner {
+        align-items: center;
+        gap: 32px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        align-items: center;
+        gap: 28px;
+        width: 100%;
+        text-align: center;
+      }
+      .footer-col {
+        align-items: center;
+        width: 100%;
+        text-align: center;
+      }
+      .footer-col-brand .logo {
+        justify-content: center;
+      }
+      .footer-col-brand .brand-desc {
+        margin: 10px auto 0;
+        text-align: center;
+      }
+      .footer-title {
+        margin-bottom: 12px;
+        text-align: center;
+      }
+      .address-card {
+        margin: 0 auto;
+        padding: 12px 16px;
+      }
+      .social-icons-row {
+        justify-content: center;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+        text-align: center;
+      }
+      .built-by {
+        order: 1;
+        padding: 5px 14px;
+        font-size: .8rem;
+      }
+      .footer-bottom small {
+        order: 2;
+        font-size: .78rem;
+        text-align: center;
       }
     }
   </style>
@@ -598,7 +810,70 @@
 
 <main id="m"></main>
 
-<footer>&copy; 2026 CakeLooms &middot; Baked slowly, finished by hand &middot; Pattambi, Kerala</footer>
+<footer id="contact" class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-col-brand">
+        <a class="logo" href="index.html" aria-label="CakeLooms home">
+          <img src="assets/logo.webp" alt="" width="52" height="52">
+          <span>CakeLooms</span>
+        </a>
+        <p class="brand-desc">Fresh birthday, custom and celebration cakes, made to order in Pattambi, Kerala.</p>
+        <a class="location-link" href="designs.html">Browse cake designs and menu</a>
+      </div>
+
+      <div class="footer-col footer-col-address">
+        <h3 class="footer-title">Visit Our Kitchen</h3>
+        <div class="address-card">
+          <div class="address-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z" />
+            </svg>
+          </div>
+          <address class="address-details">
+            <strong>HM Tower, Pattambi</strong>
+            <span>Near Railway Station, Pattambi, Kerala 679303</span>
+            <a class="location-link" href="tel:+919037141594">Call CakeLooms: +91 90371 41594</a>
+            <a class="location-link" href="https://maps.app.goo.gl/bf9RNADcqz7qbNc27" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
+              </svg>
+              <span>Get directions</span>
+            </a>
+          </address>
+        </div>
+      </div>
+
+      <div class="footer-col footer-col-social">
+        <h3 class="footer-title">Connect With Us</h3>
+        <div class="social-icons-row">
+          <a class="social-icon-btn wa-icon-btn"
+            href="https://wa.me/919037141594?text=Hi%20Cakelooms%2C%20I%20would%20like%20to%20order%20a%20cake"
+            target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" title="WhatsApp: 9037141594">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.79 14.07c-.24.68-1.41 1.25-1.95 1.33-.5.07-1.14.1-3.32-.8-2.79-1.16-4.59-4.01-4.73-4.19-.14-.19-1.13-1.51-1.13-2.87 0-1.37.71-2.04.97-2.32.25-.28.56-.35.75-.35.19 0 .37.01.53.01.17 0 .4.06.63.58.24.58.82 2 .89 2.15.07.15.12.33.02.53-.1.19-.15.31-.3.48-.15.17-.32.38-.46.51-.15.15-.31.31-.13.62.18.31.79 1.3 1.7 2.11 1.17 1.05 2.16 1.37 2.47 1.52.31.15.49.13.67-.08.19-.21.79-.92 1-.1.24.21.39.46.21.65-.18.19-.24.68-.24.68z" />
+            </svg>
+          </a>
+          <a class="social-icon-btn ig-icon-btn" href="https://instagram.com/cakelooms" target="_blank"
+            rel="noopener noreferrer" aria-label="Follow on Instagram" title="Instagram: @cakelooms">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="built-by">
+        <span>Designed &amp; Built with <i class="heart-pulse">♥</i> by <a class="dev-link"
+            href="https://mridhul9366.github.io/Mridhul-portfolio/" target="_blank"
+            rel="noopener noreferrer">Mridhul</a></span>
+      </div>
+      <small>© 2026 Cakelooms. Baked slowly, finished by hand.</small>
+    </div>
+  </div>
+</footer>
 
 <a class="fab" id="fab" href="https://wa.me/919037141594?text=Hi%20CakeLooms%2C%20I%20would%20like%20to%20order%20a%20cake" aria-label="Order on WhatsApp" target="_blank" rel="noopener">
   <svg viewBox="0 0 32 32">
@@ -857,17 +1132,6 @@ if (!calm) {
   })(last);
 }
 
-var INFO = '<div class="info">' +
-  '<h3 class="it2">Visit us in Pattambi</h3>' +
-  '<div class="addr"><b>HM Tower, Pattambi</b><br>Near Railway Station, Pattambi, Kerala 679303</div>' +
-  '<div class="acts">' +
-    '<a class="ac" target="_blank" rel="noopener" href="https://maps.app.goo.gl/bf9RNADcqz7qbNc27"><i>&#128205;</i>Directions</a>' +
-    '<a class="ac" href="tel:+919037141594"><i>&#128222;</i>Call</a>' +
-    '<a class="ac" target="_blank" rel="noopener" href="https://instagram.com/cakelooms"><i>&#128248;</i>Instagram</a>' +
-  '</div>' +
-  '<a class="dw" id="dw" target="_blank" rel="noopener" href="https://wa.me/919037141594?text=' + encodeURIComponent("Hi CakeLooms, I would like to ask about a cake and delivery") + '">Ask on WhatsApp</a>' +
-'</div>';
-
 var cur = -1;
 function show(i, scroll) {
   cur = i;
@@ -881,7 +1145,6 @@ function show(i, scroll) {
     return '<a class="it" href="' + waUrl + '" target="_blank" rel="noopener" style="--d:' + Math.min(k, 14) + '" title="Click to order ' + esc(x.n) + ' on WhatsApp">' +
       '<b>' + esc(x.n) + '</b>' +
       '<i>' + priceText + '</i>' +
-      '<span class="order-chip">Order &rarr;</span>' +
     '</a>';
   }).join("");
 
@@ -891,7 +1154,6 @@ function show(i, scroll) {
     '</div>' +
     '<div class="list">' + listHtml + '</div>' +
     '<button class="next" type="button" id="nx">Next: ' + esc(D[nextIdx].n) + ' &rarr;</button>' +
-    INFO +
   '</section>';
 
   [].forEach.call(nv.children, function(a) {

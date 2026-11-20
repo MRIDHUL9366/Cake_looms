@@ -14,22 +14,36 @@
   var fx = $('fx'), fig = $('fig'), fig3 = $('fig3'), contact = $('contact2') || $('contact'), contact3 = $('contact3'), hint = $('hint');
   var cherrySheen = $('cherrySheen'), cherryGlint = $('cherryGlint'), cherryShadow = $('cherryShadow');
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touchDevice = matchMedia('(pointer: coarse)').matches;
   var clamp = function (v) { return Math.min(1, Math.max(0, v)) }, lerp = function (a, b, t) { return a + (b - a) * t };
   var ease = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2 };
 
   /* ---------- cherry that travels: hero -> vanilla cake -> dark cake ---------- */
   var OX = .383, A2 = { x: .50, y: .135, h: .19 }, A3 = { x: .50, y: .0784, h: .168 };
-  var vw, vh, H0, W0, ax2, ay2, sc2, ax3, ay3, sc3, S1, Ta, Tb, px0, py0;
+  var vw, vh, H0, W0, ax2, ay2, sc2, ax3, ay3, sc3, S1, Ta, Tb, px0, py0, cakeMetrics = [], deliveryMetric;
+  var firstCurve = document.querySelector('#signature .drip');
   function measure() {
     vw = innerWidth; vh = innerHeight;
     H0 = Math.min(vh * (vw < 700 ? .44 : vw < 1000 ? .54 : .66), 560, vw * (vw < 700 ? .56 : vw < 1000 ? .62 : .8) * 900 / 630); W0 = H0 * .7;
     fx.style.width = W0 + 'px'; fx.style.height = H0 + 'px';
     var r = fig.getBoundingClientRect(), r3 = fig3.getBoundingClientRect(), y = scrollY;
+    cakeMetrics = [
+      { top: r.top + y, height: r.height },
+      { top: r3.top + y, height: r3.height }
+    ];
     ax2 = r.left + r.width * A2.x; ay2 = r.top + y + r.height * A2.y; sc2 = r.width * A2.h / H0;
     ax3 = r3.left + r3.width * A3.x; ay3 = r3.top + y + r3.height * A3.y; sc3 = r3.width * A3.h / H0;
+    var delRig = $('deliveryRig');
+    if (delRig) {
+      var rD = delRig.getBoundingClientRect();
+      deliveryMetric = { el: delRig, top: rD.top + y, bottom: rD.bottom + y };
+    } else {
+      deliveryMetric = null;
+    }
     S1 = Math.max(vh * .5, ay2 - vh * .55);
-    // Smooth scroll transition window between Cake 1 and Cake 2
-    Ta = Math.max(S1 + vh * .08, ay2 - vh * .38);
+    // Start the second-cake flight as the hero-to-cake divider scrolls away.
+    var curveRect = firstCurve.getBoundingClientRect();
+    Ta = Math.max(S1 + vh * .08, curveRect.top + y + curveRect.height * .8);
     Tb = ay3 - vh * .50;
     if (Tb - Ta < vh * .35) Tb = Ta + vh * .35;
     px0 = vw / 2 - (.5 - OX) * W0; py0 = vh * (vw < 1000 ? .42 : .5) + H0 / 2;
@@ -52,19 +66,21 @@
 
   var tx = 0, ty = 0, cx = 0, cy = 0, t0 = performance.now(), landedAt = -1, state = 0, last = performance.now();
   /* ---------- 3D cakes: tilt, light sweep, moving shadow ---------- */
-  var cakes = [['fig', 'tilt2', 'sheen2', 'gs2', 'cakeImg', 0], ['fig3', 'tilt3', 'sheen3', 'gs3', 'cake3Img', 2]].map(function (a) {
-    var c = { fig: $(a[0]), tilt: $(a[1]), sheen: $(a[2]), gs: $(a[3]), ph: a[5], intro: reduce ? 0 : 1, seen: false };
+  var cakes = [['fig', 'tilt2', 'sheen2', 'gs2', 'cakeImg', 0], ['fig3', 'tilt3', 'sheen3', 'gs3', 'cake3Img', 2]].map(function (a, i) {
+    var c = { fig: $(a[0]), tilt: $(a[1]), sheen: $(a[2]), gs: $(a[3]), ph: a[5], intro: reduce ? 0 : 1, seen: false, mid: 0, metric: i };
     var m = 'url("' + $(a[4]).src + '")'; c.sheen.style.webkitMaskImage = m; c.sheen.style.maskImage = m;
     new IntersectionObserver(function (en) { if (en[0].isIntersecting) c.seen = true }, { threshold: .12 }).observe(c.fig);
     return c;
   });
-  function updateCakes(now, dt) {
+  function updateCakes(now, dt, sy) {
     if (reduce) return;
     cakes.forEach(function (c) {
-      var r = c.fig.getBoundingClientRect(), mid = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh));
+      var metric = cakeMetrics[c.metric];
+      var targetMid = Math.max(-1, Math.min(1, (metric.top - sy + metric.height / 2 - vh / 2) / vh));
+      c.mid += (targetMid - c.mid) * Math.min(1, dt * 7);
       if (c.seen) c.intro += (0 - c.intro) * Math.min(1, dt * 3.2);
-      var idle = Math.sin(now / 2600 + c.ph) * 4;
-      var ry = cx * 9 + idle - mid * 12 - c.intro * 40, rx = -cy * 4 - mid * 3 + c.intro * 14;
+      var idle = touchDevice ? 0 : Math.sin(now / 2600 + c.ph) * 1.5;
+      var ry = cx * (touchDevice ? 0 : 4) + idle - c.mid * 7 - c.intro * 40, rx = -cy * (touchDevice ? 0 : 2) - c.mid * 2 + c.intro * 14;
       c.tilt.style.transform = 'perspective(1100px) rotateY(' + ry.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg)';
       c.tilt.style.opacity = (1 - c.intro * .9).toFixed(2);
       c.sheen.style.setProperty('--s', (50 - ry * 4.5).toFixed(1) + '%');
@@ -72,7 +88,10 @@
       c.gs.style.opacity = (c.ph ? (.75 + .25 * Math.sin(now / 1500)) : 1) * (1 - c.intro * .9);
     });
   }
-  addEventListener('pointermove', function (e) { tx = (e.clientX / vw - .5) * 2; ty = (e.clientY / vh - .5) * 2 }, { passive: true });
+  addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch' || touchDevice) return;
+    tx = (e.clientX / vw - .5) * 2; ty = (e.clientY / vh - .5) * 2;
+  }, { passive: true });
 
   /* ---------- chocolate and pastry falling in the hero ---------- */
   var hero = document.querySelector('.hero'), heroDrip = hero.querySelector('.drip');
@@ -182,7 +201,7 @@
     if (!reduce) stepBake(dt);
     var sy = scrollY, p = clamp(sy / S1), e1 = ease(p), q = clamp((sy - Ta) / (Tb - Ta)), e2 = ease(q), k = 1 - e1;
     cx += (tx - cx) * .07; cy += (ty - cy) * .07;
-    var idle = reduce ? 0 : Math.sin((now - t0) / 2400) * 10, bob = reduce ? 0 : Math.sin((now - t0) / 900) * 8 * k;
+    var idle = reduce || touchDevice ? 0 : Math.sin((now - t0) / 2400) * 2, bob = reduce ? 0 : Math.sin((now - t0) / 1400) * 3 * k;
 
     var st = q >= 1 ? 2 : (p >= 1 && q <= 0 ? 1 : 0);
     if (st !== state) { state = st; landedAt = st > 0 ? now : -1 }
@@ -226,9 +245,9 @@
     }
 
     // Realistic 3D perspective orientation (never collapses to 0-width paper slice)
-    var roll = Math.sin(Math.PI * e1) * -22 + (q > 0 ? Math.sin(Math.PI * q) * -26 + Math.cos(q * Math.PI * 2) * 8 : 0);
-    var pitch = -cy * 8 * k + Math.sin(Math.PI * e1) * 12 + (q > 0 ? Math.sin(Math.PI * q) * 16 : 0);
-    var yaw = (cx * 14 + idle) * k + Math.sin(Math.PI * e1) * 18 + (q > 0 ? Math.sin(Math.PI * q) * -20 : 0);
+    var roll = Math.sin(Math.PI * e1) * -12 + (q > 0 ? Math.sin(Math.PI * q) * -14 + Math.cos(q * Math.PI * 2) * 3 : 0);
+    var pitch = -cy * (touchDevice ? 0 : 4) * k + Math.sin(Math.PI * e1) * 7 + (q > 0 ? Math.sin(Math.PI * q) * 9 : 0);
+    var yaw = (cx * (touchDevice ? 0 : 7) + idle) * k + Math.sin(Math.PI * e1) * 10 + (q > 0 ? Math.sin(Math.PI * q) * -11 : 0);
 
     var ry = reduce ? 0 : yaw,
         rx = reduce ? 0 : pitch,
@@ -265,18 +284,16 @@
     contact.style.setProperty('--c', (Math.max(0, (e1 - .7) / .3) * (1 - clamp(q * 6))).toFixed(2));
     contact3.style.setProperty('--c', Math.max(0, (q - .65) / .35).toFixed(2));
 
-    updateCakes(now, dt);
-    var delRig = $('deliveryRig');
-    if (delRig) {
+    updateCakes(now, dt, sy);
+    if (deliveryMetric) {
       if (!reduce) {
-        var rD = delRig.getBoundingClientRect();
-        if (rD.top < vh && rD.bottom > 0) {
-          delRig.style.transform = 'perspective(1200px) rotateY(' + (cx * 11).toFixed(2) + 'deg) rotateX(' + (-cy * 6).toFixed(2) + 'deg)';
+        if (deliveryMetric.top - sy < vh && deliveryMetric.bottom - sy > 0) {
+          deliveryMetric.el.style.transform = 'perspective(1200px) rotateY(' + (cx * 11).toFixed(2) + 'deg) rotateX(' + (-cy * 6).toFixed(2) + 'deg)';
         }
       }
     }
     hint.style.opacity = sy > 24 ? 0 : 1;
-    rig.style.transform = 'rotateY(' + (cx * 16 + idle).toFixed(2) + 'deg) rotateX(' + (-cy * 9).toFixed(2) + 'deg)';
+    rig.style.transform = 'rotateY(' + (cx * (touchDevice ? 0 : 6) + idle).toFixed(2) + 'deg) rotateX(' + (-cy * (touchDevice ? 0 : 3)).toFixed(2) + 'deg)';
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

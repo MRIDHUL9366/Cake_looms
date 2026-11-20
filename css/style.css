@@ -814,6 +814,7 @@ a:focus-visible,
   flex-direction: column;
   gap: 3px;
   line-height: 1.35;
+  font-style: normal;
 }
 
 .address-details strong {
@@ -1234,7 +1235,8 @@ a:focus-visible,
 .order-sec {
   position: relative;
   z-index: 1;
-  min-height: auto;
+  min-height: 100vh;
+  min-height: 100svh;
   background: radial-gradient(ellipse 75% 75% at 35% 50%, #fffdf8 0%, #faf3e6 48%, #eee1ca 100%);
   color: var(--ink);
   display: flex;
@@ -1869,9 +1871,14 @@ a:focus-visible,
 }
 
 @media (max-width: 899px) {
+  .order-sec {
+    padding-top: max(72px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(32px, env(safe-area-inset-bottom, 0px));
+  }
+
   .order-grid {
     grid-template-columns: 1fr;
-    gap: 36px;
+    gap: clamp(12px, 3vh, 24px);
   }
 
   .order-stage {
